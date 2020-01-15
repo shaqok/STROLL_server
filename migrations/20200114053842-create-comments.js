@@ -1,13 +1,12 @@
-
 module.exports = {
-  up: (queryInterface, Sequelize) => queryInterface.createTable('Reviews', {
+  up: (queryInterface, Sequelize) => queryInterface.createTable('Comments', {
     id: {
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
       type: Sequelize.INTEGER,
     },
-    text: {
+    comment: {
       allowNull: false,
       type: Sequelize.STRING,
     },
@@ -15,9 +14,9 @@ module.exports = {
       allowNull: false,
       type: Sequelize.INTEGER,
     },
-    image: {
+    image_id: {
       allowNull: true,
-      type: Sequelize.BLOB('long'),
+      type: Sequelize.INTEGER,
     },
     user_id: {
       allowNull: false,
@@ -36,5 +35,5 @@ module.exports = {
       type: Sequelize.DATE,
     },
   }),
-  down: (queryInterface) => queryInterface.dropTable('Reviews'),
+  down: (queryInterface) => queryInterface.dropTable('Comments'),
 };

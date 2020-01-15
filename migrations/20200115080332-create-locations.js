@@ -1,36 +1,28 @@
 module.exports = {
-  up: (queryInterface, Sequelize) => queryInterface.createTable('Trails', {
+  up: (queryInterface, Sequelize) => queryInterface.createTable('Locations', {
     id: {
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
       type: Sequelize.INTEGER,
     },
-    user_id: {
+    location1: {
       allowNull: false,
-      type: Sequelize.INTEGER,
-    },
-    location_id: {
-      allowNull: false,
-      type: Sequelize.INTEGER,
-    },
-    category_id: {
-      allowNull: false,
-      type: Sequelize.INTEGER,
-    },
-    image_id: {
-      type: Sequelize.INTEGER,
-      allowNull: false,
-    },
-    title: {
       type: Sequelize.STRING,
-      allowNull: false,
     },
-    review: {
+    location2: {
+      allowNull: false,
       type: Sequelize.STRING,
-      allowNull: false,
     },
-    admin_district: {
+    location3: {
+      allowNull: false,
+      type: Sequelize.STRING,
+    },
+    location4: {
+      allowNull: false,
+      type: Sequelize.STRING,
+    },
+    location5: {
       allowNull: false,
       type: Sequelize.STRING,
     },
@@ -43,5 +35,5 @@ module.exports = {
       type: Sequelize.DATE,
     },
   }),
-  down: (queryInterface) => queryInterface.dropTable('Trails'),
+  down: (queryInterface) => queryInterface.dropTable('Locations'),
 };
