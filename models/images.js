@@ -16,8 +16,12 @@ module.exports = (sequelize, DataTypes) => {
   // eslint-disable-next-line func-names
   Images.associate = function (models) {
     // associations can be defined here
-    Images.hasMany(models.Trails);
-    Images.hasMany(models.Comments);
+    models.Images.hasMany(models.Trails, {
+      foreignKey: 'image_id',
+    });
+    models.Images.hasMany(models.Comments, {
+      foreignKey: 'image_id',
+    });
   };
   return Images;
 };

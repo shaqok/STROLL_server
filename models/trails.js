@@ -36,23 +36,17 @@ module.exports = (sequelize, DataTypes) => {
   // eslint-disable-next-line func-names
   Trails.associate = function (models) {
     // associations can be defined here
-    Trails.hasMany(models.Comments);
-
-    Trails.belongsTo(models.Users, {
-      foreignKey: 'user_id',
+    models.Trails.hasMany(models.Comments, {
+      foreignKey: 'trail_id',
     });
 
-    Trails.belongsTo(models.Images, {
-      foreignKey: 'image_id',
-    });
+    Trails.belongsTo(models.Users);
 
-    Trails.belongsTo(models.Locations, {
-      foreignKey: 'location_id',
-    });
+    Trails.belongsTo(models.Images);
 
-    Trails.belongsTo(models.Categories, {
-      foreignKey: 'category_id',
-    });
+    Trails.belongsTo(models.Locations);
+
+    Trails.belongsTo(models.Categories);
   };
   return Trails;
 };

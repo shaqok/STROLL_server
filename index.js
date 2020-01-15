@@ -7,8 +7,9 @@ const morgan = require('morgan');
 const app = express();
 const PORT = 3000;
 
-const userRoute = require('./routes/main');
-const trailRoute = require('./routes/trail');
+const signupRoute = require('./routes/signup');
+const signinRoute = require('./routes/signin');
+const trailsRoute = require('./routes/trails');
 
 // middleware
 app.use(
@@ -18,18 +19,20 @@ app.use(
 );
 app.use(bodyParser.json());
 app.use(cookieParser());
-app.use(
-  cors({
-    origin: ['http://localhost:3000'],
-    methods: ['GET', 'POST'],
-    credentials: true,
-  }),
-);
+// app.use(
+//   cors({
+//     origin: ['http://localhost:3000'],
+//     methods: ['GET', 'POST'],
+//     credentials: true,
+//   }),
+// );
+app.use(cors());
 app.use(morgan('dev'));
 
 // router
-app.use('/main', userRoute);
-app.use('/trail', trailRoute);
+app.use('/signup', signupRoute);
+app.use('/signin', signinRoute);
+app.use('/trails', trailsRoute);
 
 app.listen(PORT, () => {
   // eslint-disable-next-line no-console

@@ -36,8 +36,16 @@ module.exports = (sequelize, DataTypes) => {
   // eslint-disable-next-line func-names
   Users.associate = function (models) {
     // associations can be defined here
-    Users.hasMany(models.Comments);
-    Users.hasMany(models.Trails);
+    // Users.hasMany(models.Comments);
+    // Users.hasMany(models.Trails);
+    models.Users.hasMany(models.Comments, {
+      foreignKey: 'fk_userId',
+      onDelete: 'cascade',
+    });
+    models.Users.hasMany(models.Trails, {
+      foreignKey: 'fk_userId',
+      onDelete: 'cascade',
+    });
   };
   return Users;
 };
