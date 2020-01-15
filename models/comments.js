@@ -1,8 +1,8 @@
 module.exports = (sequelize, DataTypes) => {
-  const Reviews = sequelize.define(
-    'Reviews',
+  const Comments = sequelize.define(
+    'Comments',
     {
-      text: {
+      comment: {
         type: DataTypes.STRING,
         allowNull: false,
       },
@@ -10,7 +10,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
-      image: DataTypes.BLOB,
+      image_id: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+      },
       user_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
@@ -23,15 +26,19 @@ module.exports = (sequelize, DataTypes) => {
     {},
   );
   // eslint-disable-next-line func-names
-  Reviews.associate = function (models) {
+  Comments.associate = function (models) {
     // associations can be defined here
-    Reviews.belongsTo(models.Trails, {
+    Comments.belongsTo(models.Trails, {
       foreignKey: 'trail_id',
     });
 
-    Reviews.belongsTo(models.Users, {
+    Comments.belongsTo(models.Users, {
       foreignKey: 'user_id',
     });
+
+    Comments.belongsTo(models.Images, {
+      foreignKey: 'image_id',
+    });
   };
-  return Reviews;
+  return Comments;
 };

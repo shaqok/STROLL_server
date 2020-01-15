@@ -12,12 +12,8 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      nickname: {
+      username: {
         type: DataTypes.STRING,
-        allowNull: false,
-      },
-      pet: {
-        type: DataTypes.BOOLEAN,
         allowNull: false,
       },
     },
@@ -40,7 +36,7 @@ module.exports = (sequelize, DataTypes) => {
   // eslint-disable-next-line func-names
   Users.associate = function (models) {
     // associations can be defined here
-    Users.hasMany(models.Reviews);
+    Users.hasMany(models.Comments);
     Users.hasMany(models.Trails);
   };
   return Users;
