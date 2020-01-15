@@ -32,13 +32,9 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'trail_id',
     });
 
-    Comments.belongsTo(models.Users, {
-      foreignKey: 'user_id',
-    });
+    Comments.belongsTo(models.Users);
 
-    Comments.belongsTo(models.Images, {
-      foreignKey: 'image_id',
-    });
+    Comments.belongsTo(models.Images);
   };
   return Comments;
 };
