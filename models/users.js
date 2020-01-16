@@ -39,11 +39,11 @@ module.exports = (sequelize, DataTypes) => {
     // Users.hasMany(models.Comments);
     // Users.hasMany(models.Trails);
     models.Users.hasMany(models.Comments, {
-      foreignKey: 'fk_userId',
+      foreignKey: 'userId',
       onDelete: 'cascade',
     });
     models.Users.hasMany(models.Trails, {
-      foreignKey: 'fk_userId',
+      foreignKey: 'userId',
       onDelete: 'cascade',
     });
   };

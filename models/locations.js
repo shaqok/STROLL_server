@@ -23,13 +23,14 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
     },
-    {},
   );
   // eslint-disable-next-line func-names
   Locations.associate = function (models) {
     // associations can be defined here
+    // models.Locations.hasMany(models.Trails);
     models.Locations.hasMany(models.Trails, {
-      foreignKey: 'location_id',
+      foreignKey: 'locationId',
+      onDelete: 'cascade',
     });
   };
   return Locations;

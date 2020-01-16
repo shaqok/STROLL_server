@@ -6,11 +6,11 @@ module.exports = {
       primaryKey: true,
       type: Sequelize.INTEGER,
     },
-    file_name: {
+    fileName: {
       allowNull: false,
       type: Sequelize.STRING,
     },
-    file_address: {
+    fileAddress: {
       allowNull: false,
       type: Sequelize.STRING,
     },

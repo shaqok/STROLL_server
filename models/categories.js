@@ -7,13 +7,13 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
     },
-    {},
   );
   // eslint-disable-next-line func-names
   Categories.associate = function (models) {
     // associations can be defined here
     models.Categories.hasMany(models.Trails, {
-      foreignKey: 'trail_id',
+      foreignKey: 'trailId',
+      onDelete: 'cascade',
     });
   };
   return Categories;
