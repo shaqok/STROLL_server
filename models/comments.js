@@ -16,11 +16,11 @@ module.exports = (sequelize, DataTypes) => {
       },
       userId: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
       },
       trailId: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
       },
     },
   );
@@ -31,21 +31,21 @@ module.exports = (sequelize, DataTypes) => {
     Comments.belongsTo(models.Trails, {
       onDelete: 'CASCADE',
       foreignKey: {
-        allowNull: false,
+        allowNull: true,
       },
     });
 
     Comments.belongsTo(models.Users, {
       onDelete: 'CASCADE',
       foreignKey: {
-        allowNull: false,
+        allowNull: true,
       },
     });
 
     Comments.belongsTo(models.Images, {
       onDelete: 'CASCADE',
       foreignKey: {
-        allowNull: false,
+        allowNull: true,
       },
     });
   };

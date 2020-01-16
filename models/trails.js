@@ -4,19 +4,19 @@ module.exports = (sequelize, DataTypes) => {
     {
       userId: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
       },
       locationId: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
       },
       categoryId: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
       },
       imageId: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
       },
       title: {
         type: DataTypes.STRING,
@@ -44,25 +44,25 @@ module.exports = (sequelize, DataTypes) => {
     Trails.belongsTo(models.Locations, {
       onDelete: 'CASCADE',
       foreignKey: {
-        allowNull: false,
+        allowNull: true,
       },
     });
     Trails.belongsTo(models.Users, {
       onDelete: 'CASCADE',
       foreignKey: {
-        allowNull: false,
+        allowNull: true,
       },
     });
     Trails.belongsTo(models.Categories, {
       onDelete: 'CASCADE',
       foreignKey: {
-        allowNull: false,
+        allowNull: true,
       },
     });
     Trails.belongsTo(models.Images, {
       onDelete: 'CASCADE',
       foreignKey: {
-        allowNull: false,
+        allowNull: true,
       },
     });
   };
