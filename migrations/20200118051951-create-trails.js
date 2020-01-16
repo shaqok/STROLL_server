@@ -6,21 +6,41 @@ module.exports = {
       primaryKey: true,
       type: Sequelize.INTEGER,
     },
-    user_id: {
+    locationId: {
       allowNull: false,
       type: Sequelize.INTEGER,
+      onDelete: 'CASCADE',
+      references: {
+        model: 'Locations',
+        key: 'id',
+      },
     },
-    location_id: {
+    userId: {
       allowNull: false,
       type: Sequelize.INTEGER,
+      onDelete: 'CASCADE',
+      references: {
+        model: 'Users',
+        key: 'id',
+      },
     },
-    category_id: {
+    categoryId: {
       allowNull: false,
       type: Sequelize.INTEGER,
+      onDelete: 'CASCADE',
+      references: {
+        model: 'Categories',
+        key: 'id',
+      },
     },
-    image_id: {
-      type: Sequelize.INTEGER,
+    imageId: {
       allowNull: false,
+      type: Sequelize.INTEGER,
+      onDelete: 'CASCADE',
+      references: {
+        model: 'Images',
+        key: 'id',
+      },
     },
     title: {
       type: Sequelize.STRING,
@@ -30,7 +50,7 @@ module.exports = {
       type: Sequelize.STRING,
       allowNull: false,
     },
-    admin_district: {
+    adminDistrict: {
       allowNull: false,
       type: Sequelize.STRING,
     },

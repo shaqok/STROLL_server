@@ -6,23 +6,38 @@ module.exports = {
       primaryKey: true,
       type: Sequelize.INTEGER,
     },
+    userId: {
+      allowNull: false,
+      type: Sequelize.INTEGER,
+      onDelete: 'CASCADE',
+      references: {
+        model: 'Users',
+        key: 'id',
+      },
+    },
+    trailId: {
+      allowNull: false,
+      type: Sequelize.INTEGER,
+      onDelete: 'CASCADE',
+      references: {
+        model: 'Trails',
+        key: 'id',
+      },
+    },
+    imageId: {
+      allowNull: false,
+      type: Sequelize.INTEGER,
+      onDelete: 'CASCADE',
+      references: {
+        model: 'Images',
+        key: 'id',
+      },
+    },
     comment: {
       allowNull: false,
       type: Sequelize.STRING,
     },
     rating: {
-      allowNull: false,
-      type: Sequelize.INTEGER,
-    },
-    image_id: {
-      allowNull: true,
-      type: Sequelize.INTEGER,
-    },
-    user_id: {
-      allowNull: false,
-      type: Sequelize.INTEGER,
-    },
-    trail_id: {
       allowNull: false,
       type: Sequelize.INTEGER,
     },

@@ -10,31 +10,44 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
-      image_id: {
+      imageId: {
         type: DataTypes.INTEGER,
         allowNull: true,
       },
-      user_id: {
+      userId: {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
-      trail_id: {
+      trailId: {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
     },
-    {},
   );
   // eslint-disable-next-line func-names
   Comments.associate = function (models) {
     // associations can be defined here
+
     Comments.belongsTo(models.Trails, {
-      foreignKey: 'trail_id',
+      onDelete: 'CASCADE',
+      foreignKey: {
+        allowNull: false,
+      },
     });
 
-    Comments.belongsTo(models.Users);
+    Comments.belongsTo(models.Users, {
+      onDelete: 'CASCADE',
+      foreignKey: {
+        allowNull: false,
+      },
+    });
 
-    Comments.belongsTo(models.Images);
+    Comments.belongsTo(models.Images, {
+      onDelete: 'CASCADE',
+      foreignKey: {
+        allowNull: false,
+      },
+    });
   };
   return Comments;
 };
