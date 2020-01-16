@@ -7,7 +7,7 @@ module.exports = {
       type: Sequelize.INTEGER,
     },
     userId: {
-      allowNull: false,
+      allowNull: true,
       type: Sequelize.INTEGER,
       onDelete: 'CASCADE',
       references: {
@@ -16,7 +16,7 @@ module.exports = {
       },
     },
     trailId: {
-      allowNull: false,
+      allowNull: true,
       type: Sequelize.INTEGER,
       onDelete: 'CASCADE',
       references: {
@@ -25,7 +25,7 @@ module.exports = {
       },
     },
     imageId: {
-      allowNull: false,
+      allowNull: true,
       type: Sequelize.INTEGER,
       onDelete: 'CASCADE',
       references: {
