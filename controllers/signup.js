@@ -1,3 +1,4 @@
+/* eslint-disable object-shorthand */
 const { Users } = require('../models');
 
 /**
@@ -5,14 +6,37 @@ const { Users } = require('../models');
  */
 module.exports = async (req, res) => {
   // database에 들어온 바디를 넣어준다.
-  const { body } = req;
-  console.log('singup body is ', body);
+  const { email, password, username } = req.body;
 
-  const userCreate = await Users.create({
-    email: body.email,
-    password: body.password,
-    username: body.username,
+  const checkEmail = await Users.findOne({
+    where: {
+      email: email,
+    },
+  }).catch((error) => {
+    console.log(error);
+    res.sendStatus(500);
   });
-  console.log('userCreate ', userCreate);
-  res.sendStatus(200);
+
+  if (checkEmail) {
+    res.status(409).send('Account already exists');
+  } else {
+    Users.findOrCreate({
+      where: {
+        username: username,
+      },
+      defaults: {
+        email: email,
+        password: password,
+      },
+    }).spread((data, created) => {
+      if (created) {
+        res.status(201).send('Account has been successfully created');
+      } else {
+        res.status(409).send('Username already exists');
+      }
+    }).catch((error) => {
+      console.log(error);
+      res.sendStatus(500);
+    });
+  }
 };
