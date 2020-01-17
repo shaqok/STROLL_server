@@ -16,8 +16,6 @@ module.exports = async (req, res) => {
     .pbkdf2Sync(password, email, 100000, 64, 'sha512')
     .toString('hex');
 
-  console.log('signin body is ', req.body);
-
   const checkEmail = await Users.findOne({
     where: {
       email: email,
@@ -42,7 +40,7 @@ module.exports = async (req, res) => {
       res.cookie('user', token); // cookie에 token 추가
       res.json({ token: token });
     } else {
-      res.status(409).send('incorrect password');
+      res.status(409).send('Incorrect password');
     }
   } else {
     res.status(404).send('Invalid user');
