@@ -7,27 +7,33 @@ const { Users } = require('../models');
 module.exports = async (req, res) => {
   // database에 들어온 바디를 넣어준다.
   const { email, password, username } = req.body;
-  // console.log('singup body is ', body);
 
-  Users.findOne({
+  const checkEmail = await Users.findOne({
     where: {
       email: email,
     },
-  }).then((data) => {
-    if (data) {
-      res.status(409).send('Account already exits');
-    } else {
-      Users.create({
-        email: email,
-        password: password,
-        username: username,
-      }).then((result) => {
-        console.log(result.dataValues);
-        res.status(201).send('Account has been successfully created');
-      });
-    }
-  }).catch(error => {
+  }).catch((error) => {
     console.log(error);
     res.sendStatus(500);
   });
+
+  if (checkEmail) {
+    res.status(409).send('Account already exists');
+  } else {
+    Users.findOrCreate({
+      where: {
+        username: username,
+      },
+      defaults: {
+        email: email,
+        password: password,
+      },
+    }).spread((data, created) => {
+      if (created) {
+        res.status(201).send('Account has been successfully created');
+      } else {
+        res.status(409).send('Username already exists');
+      }
+    });
+  }
 };
