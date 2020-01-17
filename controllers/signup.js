@@ -34,6 +34,9 @@ module.exports = async (req, res) => {
       } else {
         res.status(409).send('Username already exists');
       }
+    }).catch((error) => {
+      console.log(error);
+      res.sendStatus(500);
     });
   }
 };
