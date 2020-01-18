@@ -1,22 +1,22 @@
 module.exports = (sequelize, DataTypes) => {
-  const Trails = sequelize.define(
-    'Trails',
+  const trails = sequelize.define(
+    'trails',
     {
       userId: {
         type: DataTypes.INTEGER,
-        allowNull: true,
+        allowNull: false,
       },
       locationId: {
         type: DataTypes.INTEGER,
-        allowNull: true,
+        allowNull: false,
       },
       categoryId: {
         type: DataTypes.INTEGER,
-        allowNull: true,
+        allowNull: false,
       },
       imageId: {
         type: DataTypes.INTEGER,
-        allowNull: true,
+        allowNull: false,
       },
       title: {
         type: DataTypes.STRING,
@@ -33,38 +33,23 @@ module.exports = (sequelize, DataTypes) => {
     },
   );
   // eslint-disable-next-line func-names
-  Trails.associate = function (models) {
+  trails.associate = function (models) {
     // associations can be defined here
 
-    models.Trails.hasMany(models.Comments, {
-      foreignKey: 'trailId',
-      onDelete: 'cascade',
-    });
+    models.trails.hasMany(models.comments);
 
-    Trails.belongsTo(models.Locations, {
-      onDelete: 'CASCADE',
-      foreignKey: {
-        allowNull: true,
-      },
+    trails.belongsTo(models.locations, {
+      foreignKey: 'locationId',
     });
-    Trails.belongsTo(models.Users, {
-      onDelete: 'CASCADE',
-      foreignKey: {
-        allowNull: true,
-      },
+    trails.belongsTo(models.users, {
+      foreignKey: 'userId',
     });
-    Trails.belongsTo(models.Categories, {
-      onDelete: 'CASCADE',
-      foreignKey: {
-        allowNull: true,
-      },
+    trails.belongsTo(models.categories, {
+      foreignKey: 'categoryId',
     });
-    Trails.belongsTo(models.Images, {
-      onDelete: 'CASCADE',
-      foreignKey: {
-        allowNull: true,
-      },
+    trails.belongsTo(models.images, {
+      foreignKey: 'imageId',
     });
   };
-  return Trails;
+  return trails;
 };

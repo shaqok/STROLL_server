@@ -1,5 +1,5 @@
 module.exports = {
-  up: (queryInterface, Sequelize) => queryInterface.createTable('Images', {
+  up: (queryInterface, Sequelize) => queryInterface.createTable('images', {
     id: {
       allowNull: false,
       autoIncrement: true,
@@ -10,7 +10,7 @@ module.exports = {
       allowNull: false,
       type: Sequelize.STRING,
     },
-    fileAddress: {
+    filePath: {
       allowNull: false,
       type: Sequelize.STRING,
     },
@@ -23,5 +23,5 @@ module.exports = {
       type: Sequelize.DATE,
     },
   }),
-  down: (queryInterface) => queryInterface.dropTable('Images'),
+  down: (queryInterface) => queryInterface.dropTable('images'),
 };

@@ -10,6 +10,7 @@ const PORT = 3000;
 const signupRoute = require('./routes/signup');
 const signinRoute = require('./routes/signin');
 const trailsRoute = require('./routes/trails');
+const imageRoute = require('./routes/image');
 
 // middleware
 app.use(
@@ -29,10 +30,14 @@ app.use(cookieParser());
 app.use(cors());
 app.use(morgan('dev'));
 
+// 정적파일 다루기 위한 설정
+app.use(express.static('uploads'));
+
 // router
 app.use('/signup', signupRoute);
 app.use('/signin', signinRoute);
 app.use('/trails', trailsRoute);
+app.use('/image', imageRoute);
 
 app.listen(PORT, () => {
   // eslint-disable-next-line no-console

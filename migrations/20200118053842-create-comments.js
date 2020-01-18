@@ -1,5 +1,5 @@
 module.exports = {
-  up: (queryInterface, Sequelize) => queryInterface.createTable('Comments', {
+  up: (queryInterface, Sequelize) => queryInterface.createTable('comments', {
     id: {
       allowNull: false,
       autoIncrement: true,
@@ -7,29 +7,26 @@ module.exports = {
       type: Sequelize.INTEGER,
     },
     userId: {
-      allowNull: true,
+      allowNull: false,
       type: Sequelize.INTEGER,
-      onDelete: 'CASCADE',
       references: {
-        model: 'Users',
+        model: 'users',
         key: 'id',
       },
     },
     trailId: {
-      allowNull: true,
+      allowNull: false,
       type: Sequelize.INTEGER,
-      onDelete: 'CASCADE',
       references: {
-        model: 'Trails',
+        model: 'trails',
         key: 'id',
       },
     },
     imageId: {
-      allowNull: true,
+      allowNull: false,
       type: Sequelize.INTEGER,
-      onDelete: 'CASCADE',
       references: {
-        model: 'Images',
+        model: 'images',
         key: 'id',
       },
     },
@@ -50,5 +47,5 @@ module.exports = {
       type: Sequelize.DATE,
     },
   }),
-  down: (queryInterface) => queryInterface.dropTable('Comments'),
+  down: (queryInterface) => queryInterface.dropTable('comments'),
 };

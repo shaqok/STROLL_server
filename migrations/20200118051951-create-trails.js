@@ -1,5 +1,5 @@
 module.exports = {
-  up: (queryInterface, Sequelize) => queryInterface.createTable('Trails', {
+  up: (queryInterface, Sequelize) => queryInterface.createTable('trails', {
     id: {
       allowNull: false,
       autoIncrement: true,
@@ -7,38 +7,34 @@ module.exports = {
       type: Sequelize.INTEGER,
     },
     locationId: {
-      allowNull: true,
+      allowNull: false,
       type: Sequelize.INTEGER,
-      onDelete: 'CASCADE',
       references: {
-        model: 'Locations',
+        model: 'locations',
         key: 'id',
       },
     },
     userId: {
-      allowNull: true,
+      allowNull: false,
       type: Sequelize.INTEGER,
-      onDelete: 'CASCADE',
       references: {
-        model: 'Users',
+        model: 'users',
         key: 'id',
       },
     },
     categoryId: {
-      allowNull: true,
+      allowNull: false,
       type: Sequelize.INTEGER,
-      onDelete: 'CASCADE',
       references: {
-        model: 'Categories',
+        model: 'categories',
         key: 'id',
       },
     },
     imageId: {
-      allowNull: true,
+      allowNull: false,
       type: Sequelize.INTEGER,
-      onDelete: 'CASCADE',
       references: {
-        model: 'Images',
+        model: 'images',
         key: 'id',
       },
     },
@@ -63,5 +59,5 @@ module.exports = {
       type: Sequelize.DATE,
     },
   }),
-  down: (queryInterface) => queryInterface.dropTable('Trails'),
+  down: (queryInterface) => queryInterface.dropTable('trails'),
 };

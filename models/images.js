@@ -1,28 +1,22 @@
 module.exports = (sequelize, DataTypes) => {
-  const Images = sequelize.define(
-    'Images',
+  const images = sequelize.define(
+    'images',
     {
       fileName: {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      fileAddress: {
+      filePath: {
         type: DataTypes.STRING,
         allowNull: false,
       },
     },
   );
   // eslint-disable-next-line func-names
-  Images.associate = function (models) {
+  images.associate = function (models) {
     // associations can be defined here
-    models.Images.hasMany(models.Trails, {
-      foreignKey: 'imageId',
-      onDelete: 'cascade',
-    });
-    models.Images.hasMany(models.Comments, {
-      foreignKey: 'imageId',
-      onDelete: 'cascade',
-    });
+    models.images.hasMany(models.trails);
+    models.images.hasMany(models.comments);
   };
-  return Images;
+  return images;
 };

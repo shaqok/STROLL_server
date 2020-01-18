@@ -1,8 +1,8 @@
 const crypto = require('crypto');
 
 module.exports = (sequelize, DataTypes) => {
-  const Users = sequelize.define(
-    'Users',
+  const users = sequelize.define(
+    'users',
     {
       email: {
         type: DataTypes.STRING,
@@ -34,18 +34,10 @@ module.exports = (sequelize, DataTypes) => {
     },
   );
   // eslint-disable-next-line func-names
-  Users.associate = function (models) {
+  users.associate = function (models) {
     // associations can be defined here
-    // Users.hasMany(models.Comments);
-    // Users.hasMany(models.Trails);
-    models.Users.hasMany(models.Comments, {
-      foreignKey: 'userId',
-      onDelete: 'cascade',
-    });
-    models.Users.hasMany(models.Trails, {
-      foreignKey: 'userId',
-      onDelete: 'cascade',
-    });
+    models.users.hasMany(models.comments);
+    models.users.hasMany(models.trails);
   };
-  return Users;
+  return users;
 };
