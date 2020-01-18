@@ -1,4 +1,4 @@
-const { trails, images } = require('../../models');
+const { trails } = require('../../models');
 /**
  * ex) http://localhost:3000/trails/:tag/:trailId
  * myPage 에서 태그를 선택한 후, 한가지 산책로를 선택했을 때 보내는 요청.

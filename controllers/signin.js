@@ -16,14 +16,16 @@ module.exports = async (req, res) => {
     .pbkdf2Sync(password, email, 100000, 64, 'sha512')
     .toString('hex');
 
-  const checkEmail = await users.findOne({
-    where: {
-      email: email,
-    },
-  }).catch((error) => {
-    console.error(error);
-    res.sendStatus(500);
-  });
+  const checkEmail = await users
+    .findOne({
+      where: {
+        email: email,
+      },
+    })
+    .catch((error) => {
+      console.error(error);
+      res.sendStatus(500);
+    });
 
   if (checkEmail) {
     if (checkEmail.dataValues.password === hashedPwd) {
