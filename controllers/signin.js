@@ -15,7 +15,7 @@ module.exports = async (req, res) => {
   const hashedPwd = crypto
     .pbkdf2Sync(password, email, 100000, 64, 'sha512')
     .toString('hex');
-
+  
   const checkEmail = await Users.findOne({
     where: {
       email: email,
@@ -24,7 +24,7 @@ module.exports = async (req, res) => {
     console.error(error);
     res.sendStatus(500);
   });
-
+  
   if (checkEmail) {
     if (checkEmail.dataValues.password === hashedPwd) {
       const token = jwt.sign(

@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
-  const Locations = sequelize.define(
-    'Locations',
+  const locations = sequelize.define(
+    'locations',
     {
       location1: {
         type: DataTypes.STRING,
@@ -25,13 +25,10 @@ module.exports = (sequelize, DataTypes) => {
     },
   );
   // eslint-disable-next-line func-names
-  Locations.associate = function (models) {
+  locations.associate = function (models) {
     // associations can be defined here
-    // models.Locations.hasMany(models.Trails);
-    models.Locations.hasMany(models.Trails, {
-      foreignKey: 'locationId',
-      onDelete: 'cascade',
-    });
+    // models.locations.hasMany(models.Trails);
+    models.locations.hasMany(models.trails);
   };
-  return Locations;
+  return locations;
 };

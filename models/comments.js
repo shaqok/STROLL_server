@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
-  const Comments = sequelize.define(
-    'Comments',
+  const comments = sequelize.define(
+    'comments',
     {
       comment: {
         type: DataTypes.STRING,
@@ -12,42 +12,33 @@ module.exports = (sequelize, DataTypes) => {
       },
       imageId: {
         type: DataTypes.INTEGER,
-        allowNull: true,
+        allowNull: false,
       },
       userId: {
         type: DataTypes.INTEGER,
-        allowNull: true,
+        allowNull: false,
       },
       trailId: {
         type: DataTypes.INTEGER,
-        allowNull: true,
+        allowNull: false,
       },
     },
   );
   // eslint-disable-next-line func-names
-  Comments.associate = function (models) {
+  comments.associate = function (models) {
     // associations can be defined here
 
-    Comments.belongsTo(models.Trails, {
-      onDelete: 'CASCADE',
-      foreignKey: {
-        allowNull: true,
-      },
+    comments.belongsTo(models.trails, {
+      foreignKey: 'trailId',
     });
 
-    Comments.belongsTo(models.Users, {
-      onDelete: 'CASCADE',
-      foreignKey: {
-        allowNull: true,
-      },
+    comments.belongsTo(models.users, {
+      foreignKey: 'userId',
     });
 
-    Comments.belongsTo(models.Images, {
-      onDelete: 'CASCADE',
-      foreignKey: {
-        allowNull: true,
-      },
+    comments.belongsTo(models.images, {
+      foreignKey: 'imageId',
     });
   };
-  return Comments;
+  return comments;
 };

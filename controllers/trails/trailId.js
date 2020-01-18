@@ -1,3 +1,4 @@
+const { trails, images } = require('../../models');
 /**
  * ex) http://localhost:3000/trails/:tag/:trailId
  * myPage 에서 태그를 선택한 후, 한가지 산책로를 선택했을 때 보내는 요청.
@@ -23,6 +24,31 @@
  * }
  * 보낸 데이터들을 front 에서 현재 위치기준으로 반경 ~km 이내(location1을 기준)만 나타내도록 filter
  */
-module.exports = (req, res) => {
-  res.send(req.params.trailId);
+module.exports = async (req, res) => {
+  // db에 trailId로 조회
+  // 1. 이미지 응답
+  // 나온 결과 중 이미지의 파일명을 파악
+  const { trailId } = req.params;
+
+  const findTrailResult = await trails.findOne({
+    where: {
+      id: trailId,
+    },
+  });
+
+  res.json({ trailIdResult: findTrailResult.dataValues });
+
+  // {
+  //   images: [3234,234234,23423,23423],
+  // }
+
+  // res.send(1579272067998.jpg);
 };
+
+// image sending test
+// file system 이용
+// GET: /trails/:tag/:taril-id 할 때 imageId 이용해서 로컬스토리지에서 이미지 찾고, 아래와 같이 이미지 보내주기(형식은 json?)
+// fs.readFile(‘./some-path/파일명.jpg’, ‘base64’, (err, base64Image) => {
+//     const dataUrl = `data:image/jpeg;base64, ${base64Image}`
+//     return res.send(`<img src=${dataUrl}>`);
+// });
