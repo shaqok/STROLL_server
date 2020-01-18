@@ -3,7 +3,7 @@
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const secretObj = require('../config/jwt');
-const { Users } = require('../models');
+const { users } = require('../models');
 
 /**
  * 이미 회원가입이 완료된 사람(email 확인)인지 DB에서 조회 -> 아니라면 401 리턴
@@ -15,8 +15,8 @@ module.exports = async (req, res) => {
   const hashedPwd = crypto
     .pbkdf2Sync(password, email, 100000, 64, 'sha512')
     .toString('hex');
-  
-  const checkEmail = await Users.findOne({
+
+  const checkEmail = await users.findOne({
     where: {
       email: email,
     },
@@ -24,7 +24,7 @@ module.exports = async (req, res) => {
     console.error(error);
     res.sendStatus(500);
   });
-  
+
   if (checkEmail) {
     if (checkEmail.dataValues.password === hashedPwd) {
       const token = jwt.sign(
