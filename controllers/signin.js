@@ -36,7 +36,7 @@ module.exports = async (req, res) => {
         },
         secretObj.secret, // 비밀 키
         {
-          expiresIn: '5m', // 유효 시간은 5분
+          expiresIn: '30m', // 유효 시간은 5분
         },
       );
       res.cookie('user', token); // cookie에 token 추가

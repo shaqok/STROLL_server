@@ -1,17 +1,21 @@
+/* eslint-disable no-console */
+/* eslint-disable object-shorthand */
+const jwt = require('jsonwebtoken');
+const secretObj = require('../../config/jwt');
+
 const {
   trails,
   users,
   locations,
   categories,
-  images,
 } = require('../../models');
 
 module.exports = {
   /**
    * 로그인하고 myPage를 처음 산책로들을 render 할 때 보내는 요청.
-   * 필요한 데이터: token(decoded)으로 인증, userId(req.cookie(s).id 로 가져온다),
+   * 필요한 데이터: token(decoded -> userId, email 포함)으로 인증,
    * 1. 먼저 토큰의 유무를 확인한다. -> 없으면 401
-   * 2. 토큰이 있다면 req.cookie(s) 를 통해 userId 를 받는다.
+   * 2. 토큰을 통해 userId 를 받는다.
    * 3. 모든 locations 데이터, trailId 에 따른 username(작성자), title, tag (,rating) 를 응답으로 보낸다.
    * -주의: trail에 있는 userId는 작성자의 정보, token 과 같이 들어오는 id는 현재 접속한 유저!
    * ㄴ 형식:
@@ -43,45 +47,48 @@ module.exports = {
    * 5. status 201
    */
   post: async (req, res) => {
-    const { body } = req;
-
-    const findUserResult = await users.findOne({
-      where: {
-        id: 1,
-      },
-    });
+    const {
+      imageId, tag, title, review, adminDistrict,
+    } = req.body;
+    const newLocations = JSON.parse(req.body.newLocations);
+    // verify token
+    const token = req.cookies.user;
+    const decoded = jwt.verify(token, secretObj.secret);
     // locations
-    const locationCreate = await locations.create({
-      location1: '6',
-      location2: '7',
-      location3: '8',
-      location4: '9',
-      location5: '10',
+    const createLocation = await locations.create({
+      location1: JSON.stringify(newLocations[0]),
+      location2: JSON.stringify(newLocations[1]),
+      location3: JSON.stringify(newLocations[2]),
+      location4: JSON.stringify(newLocations[3]),
+      location5: JSON.stringify(newLocations[4]),
+    }).catch((error) => {
+      console.log(error);
+      res.sendStatus(500);
     });
     // categories
-    const categoryCreate = await categories.create({
-      tag: 'beach view',
-    });
-    // images
-    const imageFind = await images.findOne({
+    const [createCategory, created] = await categories.findOrCreate({
       where: {
-        id: 1,
+        tag: tag,
       },
+    }).catch((error) => {
+      console.log(error);
+      res.sendStatus(500);
     });
-    // console.log(locationCreate.dataValues.id);
-    // console.log(categoryCreate.dataValues.id);
-    // console.log(imageFind.dataValues.id);
-
-    const createTrailResult = await trails.create({
-      userId: findUserResult.dataValues.id,
-      locationId: locationCreate.dataValues.id,
-      categoryId: categoryCreate.dataValues.id,
-      imageId: imageFind.dataValues.id,
-      title: body.title,
-      review: body.review,
-      adminDistrict: body.adminDistrict,
+    // trails
+    const createTrail = await trails.create({
+      userId: decoded.userId,
+      locationId: createLocation.dataValues.id,
+      categoryId: createCategory.dataValues.id || created.dataValues.id,
+      imageId: imageId,
+      title: title,
+      review: review,
+      adminDistrict: adminDistrict,
+    }).catch((error) => {
+      console.log(error);
+      res.sendStatus(500);
     });
-    res.json({ trailResult: createTrailResult.dataValues });
+    // send trails
+    res.json(createTrail.dataValues);
   },
 };
 
@@ -91,4 +98,4 @@ module.exports = {
 // image_id
 // title
 // review
-// admin_district
+// adminDistrict
