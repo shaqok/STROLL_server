@@ -2,7 +2,6 @@
 /* eslint-disable object-shorthand */
 const jwt = require('jsonwebtoken');
 const secretObj = require('../../config/jwt');
-
 const {
   trails,
   users,
@@ -16,25 +15,60 @@ module.exports = {
    * 필요한 데이터: token(decoded -> (userId, email 포함)으로 인증,
    * 1. 먼저 토큰의 유무를 확인한다. -> 없으면 401
    * 2. 토큰을 통해 userId 를 받는다.
-   * 3. 모든 locations 데이터, trailId 에 따른 username(작성자), title, tag (,rating) 를 응답으로 보낸다.
+   * 3. trailId 에 따른 모든 locations 데이터, username(작성자), title, tag (,rating) 를 응답으로 보낸다.
    * -주의: trail에 있는 userId는 작성자의 정보, token 과 같이 들어오는 id는 현재 접속한 유저!
    * ㄴ 형식:
-   * {
+   * [{
    *   trailId: 1,
-   *   location1: (x, y),
-   *   location2: (x, y),
-   *   location3: (x, y),
-   *   location4: (x, y),
-   *   location5: (x, y),
-   *   username: 'user1',
+   *   locationId: 1,
+   *   userId: 1,
+   *   categoryId: 1,
    *   title: 'good trail',
    *   tag: 'night view',
+   *   username: 'user1',
+   *   locationsById: [[1,1],[2,2],[3,3],[4,4],[5,5]] 아님 각 location key:value 들
    *   (rating: 5, 한 trail 의 정보창에 있는게 나을수도..)
-   * }
+   * },]
    * 보낸 데이터들을 front 에서 현재 위치기준으로 반경 ~km 이내(location1을 기준)만 나타내도록 filter
    */
-  get: (req, res) => {
-    res.send('trails get success!');
+  get: async (req, res) => {
+    const token = req.cookies.user;
+    const decoded = jwt.verify(token, secretObj.secret);
+
+    if (decoded) {
+      const allTrails = await trails.findAll();
+      // console.log(allTrails);
+
+      const trailsWithInfo = [];
+
+      for (let i = 0; i < allTrails.length; i += 1) {
+        // eslint-disable-next-line no-await-in-loop
+        const eachInfos = await trails.findAll({
+          include: [
+            {
+              model: users,
+              attributes: ['username'],
+            },
+            {
+              model: locations,
+              attributes: ['location1', 'location2', 'location3', 'location4', 'location5'],
+            },
+            {
+              model: categories,
+              attributes: ['tag'],
+            },
+          ],
+          raw: true,
+        });
+        // eachInfos[i] = JSON.parse(eachInfos[i]);
+        // eachInfos[i].location = [eachInfos[i].location];
+        trailsWithInfo.push(eachInfos[i]);
+      }
+      console.log(trailsWithInfo);
+      res.send(trailsWithInfo);
+    } else {
+      res.sendStatus(401);
+    }
   },
   /**
    * 새로운 산책로를 생성할 때 보내는 post 요청.
