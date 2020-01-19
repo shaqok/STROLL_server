@@ -31,44 +31,41 @@ module.exports = {
    * },]
    * 보낸 데이터들을 front 에서 현재 위치기준으로 반경 ~km 이내(location1을 기준)만 나타내도록 filter
    */
-  get: async (req, res) => {
+  get: (req, res) => {
     const token = req.cookies.user;
-    const decoded = jwt.verify(token, secretObj.secret);
-
-    if (decoded) {
-      const allTrails = await trails.findAll();
-      // console.log(allTrails);
-
-      const trailsWithInfo = [];
-
-      for (let i = 0; i < allTrails.length; i += 1) {
-        // eslint-disable-next-line no-await-in-loop
-        const eachInfos = await trails.findAll({
-          include: [
-            {
-              model: users,
-              attributes: ['username'],
-            },
-            {
-              model: locations,
-              attributes: ['location1', 'location2', 'location3', 'location4', 'location5'],
-            },
-            {
-              model: categories,
-              attributes: ['tag'],
-            },
-          ],
-          raw: true,
-        });
-        // eachInfos[i] = JSON.parse(eachInfos[i]);
-        // eachInfos[i].location = [eachInfos[i].location];
-        trailsWithInfo.push(eachInfos[i]);
+    // 토큰 인증 절차 -> 없으면 201
+    jwt.verify(token, secretObj.secret, async (err, decoded) => {
+      if (decoded) {
+        const allTrails = await trails.findAll();
+        const trailsWithInfo = [];
+        // 각 trail의 foreign key로 연결된 테이블들에서 username, location들, tag 를 가져와 배열에 요소로 추가한다.
+        for (let i = 0; i < allTrails.length; i += 1) {
+          // eslint-disable-next-line no-await-in-loop
+          const eachInfos = await trails.findAll({
+            include: [
+              {
+                model: users, // 원하는 테이블에서
+                attributes: ['username'], // 원하는 요소만 조인한다.
+              },
+              {
+                model: locations,
+                attributes: ['location1', 'location2', 'location3', 'location4', 'location5'],
+              },
+              {
+                model: categories,
+                attributes: ['tag'],
+              },
+            ],
+            raw: true, // datavalues 만 가져오는 옵션
+          });
+          trailsWithInfo.push(eachInfos[i]);
+        }
+        res.send(trailsWithInfo);
+      } else {
+        res.sendStatus(401);
       }
-      console.log(trailsWithInfo);
-      res.send(trailsWithInfo);
-    } else {
-      res.sendStatus(401);
-    }
+    });
+
   },
   /**
    * 새로운 산책로를 생성할 때 보내는 post 요청.
