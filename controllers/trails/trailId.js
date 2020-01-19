@@ -1,54 +1,111 @@
-const { trails } = require('../../models');
-/**
- * ex) http://localhost:3000/trails/:tag/:trailId
- * myPage 에서 태그를 선택한 후, 한가지 산책로를 선택했을 때 보내는 요청.
- * 필요한 데이터: token(decoded)으로 인증, userId(req.cookie(s).id 로 가져온다),
- * 1. 먼저 토큰의 유무를 확인한다. -> 없으면 401
- * 2. 토큰이 있다면 req.cookie(s) 를 통해 userId 를 받는다.
- * 3. trailId 에 따른 locations 데이터, username(작성자), title, tag (,rating) 를 응답으로 보낸다.
- * -주의: trail에 있는 userId는 작성자의 정보, token 과 같이 들어오는 id는 현재 접속한 유저!
- * ㄴ 형식:
- * {
- *   trailId: 1,
- *   location1: (x, y),
- *   location2: (x, y),
- *   location3: (x, y),
- *   location4: (x, y),
- *   location5: (x, y),
- *   username(작성자): 'user1',
- *   title: 'good trail',
- *   review: 'favorite trail',
- *   comment, rating, username(댓글), image:
- *         Comments.findAll({where: trailId:trailId} + username, Images),
- *   tag: 'night view',
- * }
- * 보낸 데이터들을 front 에서 현재 위치기준으로 반경 ~km 이내(location1을 기준)만 나타내도록 filter
- */
-module.exports = async (req, res) => {
-  // db에 trailId로 조회
-  // 1. 이미지 응답
-  // 나온 결과 중 이미지의 파일명을 파악
-  const { trailId } = req.params;
+const jwt = require('jsonwebtoken');
+const secretObj = require('../../config/jwt');
 
-  const findTrailResult = await trails.findOne({
-    where: {
-      id: trailId,
-    },
+const {
+  trails,
+  users,
+  locations,
+  categories,
+  images,
+  comments,
+} = require('../../models');
+
+module.exports = (req, res) => {
+  const token = req.cookies.user;
+
+  // * token이 정상적인지 확인
+  jwt.verify(token, secretObj.secret, async (err, decoded) => {
+    if (decoded) {
+      const { trailId } = req.params;
+      const resData = {};
+
+      const findRef = await trails.findOne({
+        where: {
+          id: trailId,
+        },
+      });
+
+      // * findRef의 데이터를 이용하여 각각의 모델을 inner join 하기
+      const joinResult = await trails.findAll({
+        include: [
+          {
+            model: locations,
+            where: {
+              id: findRef.locationId,
+            },
+          },
+          {
+            model: users,
+            // ! 원하는 column 선택 가능
+            // attributes: ['username', 'email'],
+            where: {
+              id: findRef.userId,
+            },
+          },
+          {
+            model: categories,
+            where: {
+              id: findRef.categoryId,
+            },
+          },
+          {
+            model: images,
+            where: {
+              id: findRef.imageId,
+            },
+          },
+        ],
+        raw: true,
+      });
+
+      resData.trail = joinResult[0];
+
+      // ! comments는 관계에 의해 별도로 실행 => 하나의 triail에 여러 comment가 각기 다른 key/value를 가지기 때문
+      // * comments 모델에서 req.params.trailid를 이용하여 trailId가 같은 데이터 전부 가져오기
+      const findCommentsRef = await comments.findAll({
+        where: {
+          trailId: trailId,
+        },
+      });
+
+      // * req.params.trailId와 같은 모든 comments를 반복문을 이용하여 각각의 코멘트의 외래키와 조인한 다음, 하나로 묶기
+      // ! comments를 하나로 묶기 위한 배열 생성
+
+      for (let i = 0; i < findCommentsRef.length; i += 1) {
+        // eslint-disable-next-line no-await-in-loop
+        const findEachComments = await comments.findAll({
+          // * join하려는 모델과 조건을 지정
+          include: [
+            {
+              model: trails,
+              where: {
+                id: findCommentsRef[i].dataValues.trailId,
+              },
+            },
+            {
+              model: users,
+              where: {
+                id: findCommentsRef[i].dataValues.userId,
+              },
+            },
+            {
+              model: images,
+              where: {
+                id: findCommentsRef[i].dataValues.imageId,
+              },
+            },
+          ],
+          raw: true,
+        });
+        resData[`comment${i}`] = findEachComments[0];
+      }
+
+      console.log(resData);
+      // * json형식으로 클라이언트에 응답!
+      res.json(resData);
+    } else {
+      // * Token이 비정상인 경우
+      res.sendStatus(401);
+    }
   });
-
-  res.json({ trailIdResult: findTrailResult.dataValues });
-
-  // {
-  //   images: [3234,234234,23423,23423],
-  // }
-
-  // res.send(1579272067998.jpg);
 };
-
-// image sending test
-// file system 이용
-// GET: /trails/:tag/:taril-id 할 때 imageId 이용해서 로컬스토리지에서 이미지 찾고, 아래와 같이 이미지 보내주기(형식은 json?)
-// fs.readFile(‘./some-path/파일명.jpg’, ‘base64’, (err, base64Image) => {
-//     const dataUrl = `data:image/jpeg;base64, ${base64Image}`
-//     return res.send(`<img src=${dataUrl}>`);
-// });
