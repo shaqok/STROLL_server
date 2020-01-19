@@ -36,7 +36,13 @@ module.exports = {
     // 토큰 인증 절차 -> 없으면 201
     jwt.verify(token, secretObj.secret, async (err, decoded) => {
       if (decoded) {
-        const allTrails = await trails.findAll();
+        const allTrails = await trails.findAll({}).catch((error) => {
+          console.log(error);
+          res.sendStatus(500);
+        });
+        if (!allTrails) {
+          res.sendStatus(404);
+        }
         const trailsWithInfo = [];
         // 각 trail의 foreign key로 연결된 테이블들에서 username, location들, tag 를 가져와 배열에 요소로 추가한다.
         for (let i = 0; i < allTrails.length; i += 1) {
@@ -57,8 +63,14 @@ module.exports = {
               },
             ],
             raw: true, // datavalues 만 가져오는 옵션
+          }).catch((error) => {
+            console.log(error);
+            res.sendStatus(500);
           });
           trailsWithInfo.push(eachInfos[i]);
+        }
+        if (!trailsWithInfo.length) {
+          res.sendStatus(404);
         }
         res.send(trailsWithInfo);
       } else {
