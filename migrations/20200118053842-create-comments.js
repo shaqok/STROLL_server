@@ -23,7 +23,7 @@ module.exports = {
       },
     },
     imageId: {
-      allowNull: false,
+      allowNull: true,
       type: Sequelize.INTEGER,
       references: {
         model: 'images',

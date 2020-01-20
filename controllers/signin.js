@@ -29,6 +29,7 @@ module.exports = async (req, res) => {
 
   if (checkEmail) {
     if (checkEmail.dataValues.password === hashedPwd) {
+      console.log('1');
       const token = jwt.sign(
         {
           userId: checkEmail.dataValues.id,
@@ -36,15 +37,17 @@ module.exports = async (req, res) => {
         },
         secretObj.secret, // 비밀 키
         {
-          expiresIn: '30m', // 유효 시간은 5분
+          expiresIn: '300m', // 유효 시간은 30분
         },
       );
       res.cookie('user', token); // cookie에 token 추가
-      res.json({ token: token });
+      res.status(200).json({ token: token });
     } else {
-      res.status(409).send('Incorrect password');
+      console.log('2');
+      res.sendStatus(401);
     }
   } else {
-    res.status(404).send('Invalid user');
+    console.log('3');
+    res.sendStatus(401);
   }
 };

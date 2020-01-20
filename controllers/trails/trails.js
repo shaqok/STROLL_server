@@ -7,6 +7,7 @@ const {
   users,
   locations,
   categories,
+  images,
 } = require('../../models');
 
 module.exports = {
@@ -36,48 +37,61 @@ module.exports = {
     // 토큰 인증 절차 -> 없으면 201
     jwt.verify(token, secretObj.secret, async (err, decoded) => {
       if (decoded) {
-        const allTrails = await trails.findAll({}).catch((error) => {
-          console.log(error);
-          res.sendStatus(500);
-        });
-        if (!allTrails) {
-          res.sendStatus(404);
-        }
         const trailsWithInfo = [];
         // 각 trail의 foreign key로 연결된 테이블들에서 username, location들, tag 를 가져와 배열에 요소로 추가한다.
-        for (let i = 0; i < allTrails.length; i += 1) {
-          // eslint-disable-next-line no-await-in-loop
-          const eachInfos = await trails.findAll({
+        // eslint-disable-next-line no-await-in-loop
+        const eachInfos = await trails
+          .findAll({
             include: [
               {
                 model: users, // 원하는 테이블에서
+                required: true,
                 attributes: ['username'], // 원하는 요소만 조인한다.
               },
               {
                 model: locations,
-                attributes: ['location1', 'location2', 'location3', 'location4', 'location5'],
+                required: true,
+                attributes: [
+                  'location1',
+                  'location2',
+                  'location3',
+                  'location4',
+                  'location5',
+                ],
               },
               {
                 model: categories,
+                required: true,
                 attributes: ['tag'],
               },
             ],
             raw: true, // datavalues 만 가져오는 옵션
-          }).catch((error) => {
+            nest: true,
+          })
+          .catch((error) => {
             console.log(error);
             res.sendStatus(500);
           });
+        for (let i = 0; i < eachInfos.length; i += 1) {
+          // console.log(eachInfos[i]['user.username']);
           trailsWithInfo.push(eachInfos[i]);
+          trailsWithInfo[i].location = [
+            eachInfos[i].location.location1,
+            eachInfos[i].location.location2,
+            eachInfos[i].location.location3,
+            eachInfos[i].location.location4,
+            eachInfos[i].location.location5,
+          ];
         }
         if (!trailsWithInfo.length) {
           res.sendStatus(404);
+        } else {
+          res.status(200).json({ trails: trailsWithInfo });
         }
-        res.send(trailsWithInfo);
       } else {
         res.sendStatus(401);
       }
     });
-
   },
   /**
    * 새로운 산책로를 생성할 때 보내는 post 요청.
@@ -90,49 +104,66 @@ module.exports = {
    * 5. status 201
    */
   post: (req, res) => {
+    console.log('req.file is ??? ', req.file);
+    console.log('req.body is ??? ', req.body);
+
     const token = req.cookies.user;
     // verify token -> 없으면 send 401
     jwt.verify(token, secretObj.secret, async (err, decoded) => {
       if (decoded) {
         const {
-          imageId, tag, title, review, adminDistrict,
+          tag, title, review, adminDistrict, newLocations,
         } = req.body;
-        const newLocations = JSON.parse(req.body.newLocations);
+
+        let createImageResult;
+        if (req.file !== undefined) {
+          createImageResult = await images.create({
+            fileName: req.file.filename,
+            filePath: req.file.path,
+          });
+        }
+
         // locations
-        const createLocation = await locations.create({
-          location1: JSON.stringify(newLocations[0]),
-          location2: JSON.stringify(newLocations[1]),
-          location3: JSON.stringify(newLocations[2]),
-          location4: JSON.stringify(newLocations[3]),
-          location5: JSON.stringify(newLocations[4]),
-        }).catch((error) => {
-          console.log(error);
-          res.sendStatus(500);
-        });
+        const createLocation = await locations
+          .create({
+            location1: JSON.stringify(newLocations[0]),
+            location2: JSON.stringify(newLocations[1]),
+            location3: JSON.stringify(newLocations[2]),
+            location4: JSON.stringify(newLocations[3]),
+            location5: JSON.stringify(newLocations[4]),
+          })
+          .catch((error) => {
+            console.log(error);
+            res.sendStatus(500);
+          });
         // categories
-        const [createCategory, created] = await categories.findOrCreate({
-          where: {
-            tag: tag,
-          },
-        }).catch((error) => {
-          console.log(error);
-          res.sendStatus(500);
-        });
+        const [createCategory, created] = await categories
+          .findOrCreate({
+            where: {
+              tag: tag,
+            },
+          })
+          .catch((error) => {
+            console.log(error);
+            res.sendStatus(500);
+          });
         // trails
-        const createTrail = await trails.create({
-          userId: decoded.userId,
-          locationId: createLocation.dataValues.id,
-          categoryId: createCategory.dataValues.id || created.dataValues.id,
-          imageId: imageId,
-          title: title,
-          review: review,
-          adminDistrict: adminDistrict,
-        }).catch((error) => {
-          console.log(error);
-          res.sendStatus(500);
-        });
+        const createTrail = await trails
+          .create({
+            userId: decoded.userId,
+            locationId: createLocation.dataValues.id,
+            categoryId: createCategory.dataValues.id || created.dataValues.id,
+            imageId: createImageResult !== undefined ? createImageResult.dataValues.id : null,
+            title: title,
+            review: review,
+            adminDistrict: adminDistrict,
+          })
+          .catch((error) => {
+            console.log(error);
+            res.sendStatus(500);
+          });
         // send trails
-        res.json(createTrail.dataValues);
+        res.status(200).json({ trails: createTrail.dataValues });
       } else {
         res.sendStatus(401);
       }

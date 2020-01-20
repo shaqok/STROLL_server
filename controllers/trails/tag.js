@@ -52,7 +52,7 @@ module.exports = (req, res) => {
       });
       // 존재하지 않는 tag라면 404
       if (!checkTag) {
-        res.send(404);
+        res.sendStatus(404);
       }
       // checkTag에서 확인한 id를 이용하여 해당 id를 가진 trails를 findAll()
       const checkTrailsByTag = await trails.findAll({
@@ -62,23 +62,39 @@ module.exports = (req, res) => {
         include: [
           {
             model: users,
+            required: true,
             attributes: ['username'],
           },
           {
             model: locations,
+            required: true,
             attributes: ['location1', 'location2', 'location3', 'location4', 'location5'],
           },
         ],
         raw: true,
+        nest: true,
       }).catch((error) => {
         console.error(error);
         res.sendStatus(500);
       });
-      // 해당 태그의 trail이 없다면 404
-      if (!checkTrailsByTag) {
-        res.send(404);
+      // locations 하나로 병합
+      const combineTrailsLocation = [];
+      for (let i = 0; i < checkTrailsByTag.length; i += 1) {
+        // console.log(eachInfos[i]['user.username']);
+        combineTrailsLocation.push(checkTrailsByTag[i]);
+        combineTrailsLocation[i].location = [
+          checkTrailsByTag[i].location.location1,
+          checkTrailsByTag[i].location.location2,
+          checkTrailsByTag[i].location.location3,
+          checkTrailsByTag[i].location.location4,
+          checkTrailsByTag[i].location.location5,
+        ];
       }
-      res.send(checkTrailsByTag);
+      // 해당 태그의 trail이 없다면 404
+      if (!combineTrailsLocation) {
+        res.sendState(404);
+      }
+      res.status(200).json(combineTrailsLocation);
     // token이 없다면 401
     } else {
       res.sendStatus(401);

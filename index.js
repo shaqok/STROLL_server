@@ -19,14 +19,14 @@ app.use(
 );
 app.use(bodyParser.json());
 app.use(cookieParser());
-// app.use(
-//   cors({
-//     origin: ['http://localhost:3000'],
-//     methods: ['GET', 'POST'],
-//     credentials: true,
-//   }),
-// );
-app.use(cors());
+app.use(
+  cors({
+    origin: ['http://localhost:3000'],
+    methods: ['GET', 'POST'],
+    credentials: true,
+  }),
+);
+// app.use(cors());
 app.use(morgan('dev'));
 
 // 정적파일 다루기 위한 설정

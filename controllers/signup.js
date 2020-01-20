@@ -19,7 +19,7 @@ module.exports = async (req, res) => {
     });
 
   if (checkEmail) {
-    res.status(409).send('Account already exists');
+    res.sendStatus(409);
   } else {
     users
       .findOrCreate({
@@ -33,9 +33,9 @@ module.exports = async (req, res) => {
       })
       .spread((data, created) => {
         if (created) {
-          res.status(201).send('Account has been successfully created');
+          res.status(201).json(data);
         } else {
-          res.status(409).send('Username already exists');
+          res.sendStatus(409);
         }
       })
       .catch((error) => {
