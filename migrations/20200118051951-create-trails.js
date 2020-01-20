@@ -31,7 +31,7 @@ module.exports = {
       },
     },
     imageId: {
-      allowNull: false,
+      allowNull: true,
       type: Sequelize.INTEGER,
       references: {
         model: 'images',
@@ -47,7 +47,7 @@ module.exports = {
       allowNull: false,
     },
     adminDistrict: {
-      allowNull: false,
+      allowNull: true,
       type: Sequelize.STRING,
     },
     createdAt: {

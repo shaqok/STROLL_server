@@ -4,6 +4,8 @@ const secretObj = require('../../config/jwt');
 const { images } = require('../../models');
 
 module.exports = (req, res) => {
+  console.log('req.file is ??? ', req.file);
+  console.log('req.body is ??? ', req.body);
   const token = req.cookies.user;
   jwt.verify(token, secretObj.secret, async (err, decoded) => {
     if (decoded) {
@@ -11,7 +13,7 @@ module.exports = (req, res) => {
         fileName: req.file.filename,
         filePath: req.file.path,
       });
-      res.status(200).json(createImageResult.dataValues);
+      res.status(201).json({ imageId: createImageResult.dataValues });
     } else {
       res.sendStatus(401);
     }

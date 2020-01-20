@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       imageId: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
       },
       title: {
         type: DataTypes.STRING,
@@ -28,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       adminDistrict: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
       },
     },
   );
