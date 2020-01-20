@@ -17,7 +17,7 @@ module.exports = (req, res) => {
   jwt.verify(token, secretObj.secret, async (err, decoded) => {
     if (decoded) {
       const { trailId } = req.params;
-      // console.log('trailId ', trailId);
+
       const resData = {
         trail: null,
         comments: [],
@@ -27,6 +27,7 @@ module.exports = (req, res) => {
         where: {
           id: trailId,
         },
+        raw: true,
       });
 
       // * findRef의 데이터를 이용하여 각각의 모델을 inner join 하기
@@ -54,9 +55,10 @@ module.exports = (req, res) => {
               id: findRef.categoryId,
             },
           },
+          // ! image가 null 경우 고려하여 left outer join으로 실시
           {
             model: images,
-            required: true,
+            required: false,
             where: {
               id: findRef.imageId,
             },
@@ -79,7 +81,7 @@ module.exports = (req, res) => {
         ];
       }
 
-      resData.trail = combineTrailsLocation;
+      resData.trail = combineTrailsLocation[0];
 
       // ! comments는 관계에 의해 별도로 실행 => 하나의 triail에 여러 comment가 각기 다른 key/value를 가지기 때문
       // * comments 모델에서 req.params.trailid를 이용하여 trailId가 같은 데이터 전부 가져오기
@@ -87,9 +89,8 @@ module.exports = (req, res) => {
         where: {
           trailId: trailId,
         },
+        raw: true,
       });
-
-      // console.log('findCommentsRef ', findCommentsRef);
 
       // * req.params.trailId와 같은 모든 comments를 반복문을 이용하여 각각의 코멘트의 외래키와 조인한 다음, 하나로 묶기
       // ! comments를 하나로 묶기 위한 배열 생성
@@ -100,9 +101,9 @@ module.exports = (req, res) => {
           // ! 반복문으로 join할 때, include의 where 조건이 같은 데이터가 복수 존재하면,
           // ! 항상 앞의 데이터가 결과로 나오기 때문에 설정함
           where: {
-            comment: findCommentsRef[i].dataValues.comment,
-            rating: findCommentsRef[i].dataValues.rating,
-            createdAt: findCommentsRef[i].dataValues.createdAt,
+            comment: findCommentsRef[i].comment,
+            rating: findCommentsRef[i].rating,
+            createdAt: findCommentsRef[i].createdAt,
           },
           // * join하려는 모델과 조건을 지정
           include: [
@@ -110,21 +111,21 @@ module.exports = (req, res) => {
               model: trails,
               required: true,
               where: {
-                id: findCommentsRef[i].dataValues.trailId,
+                id: findCommentsRef[i].trailId,
               },
             },
             {
               model: users,
               required: true,
               where: {
-                id: findCommentsRef[i].dataValues.userId,
+                id: findCommentsRef[i].userId,
               },
             },
             {
               model: images,
-              required: true,
+              required: false,
               where: {
-                id: findCommentsRef[i].dataValues.imageId,
+                id: findCommentsRef[i].imageId,
               },
             },
           ],
