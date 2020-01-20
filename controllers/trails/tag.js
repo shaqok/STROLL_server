@@ -80,7 +80,6 @@ module.exports = (req, res) => {
       // locations 하나로 병합
       const combineTrailsLocation = [];
       for (let i = 0; i < checkTrailsByTag.length; i += 1) {
-        // console.log(eachInfos[i]['user.username']);
         combineTrailsLocation.push(checkTrailsByTag[i]);
         combineTrailsLocation[i].location = [
           checkTrailsByTag[i].location.location1,

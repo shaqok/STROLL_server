@@ -6,7 +6,7 @@ const { users } = require('../models');
 module.exports = async (req, res) => {
   // database에 들어온 바디를 넣어준다.
   const { email, password, username } = req.body;
-
+  // 요청한 email이 이미 DB에 존재하는지 확인.
   const checkEmail = await users
     .findOne({
       where: {
@@ -17,10 +17,11 @@ module.exports = async (req, res) => {
       console.log(error);
       res.sendStatus(500);
     });
-
+  // 이미 존재한다면 409
   if (checkEmail) {
     res.sendStatus(409);
   } else {
+    // 존재하지 않는다면, username도 중복되는지 확인. 존재하면 409, 존재하지 않으면 DB에 추가.
     users
       .findOrCreate({
         where: {
