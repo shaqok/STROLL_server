@@ -54,6 +54,11 @@ module.exports = (req, res) => {
             required: true,
             attributes: ['location1', 'location2', 'location3', 'location4', 'location5'],
           },
+          {
+            model: categories,
+            required: true,
+            attributes: ['tag'],
+          },
         ],
         raw: true,
         nest: true,
