@@ -7,15 +7,18 @@ module.exports = (req, res) => {
   const token = req.cookies.user;
   jwt.verify(token, secretObj.secret, async (err, decoded) => {
     if (decoded) {
-      const createImageResult = await images.create({
-        fileName: req.file.filename,
-        filePath: req.file.path,
-      });
-
+      let createImageResult;
+      if (req.file !== undefined) {
+        createImageResult = await images.create({
+          fileName: req.file.filename,
+          filePath: req.file.path,
+        });
+      }
+      console.log(Number(req.params.trailId));
       const createCommentResult = await comments.create({
         userId: decoded.userId,
         trailId: Number(req.params.trailId),
-        imageId: createImageResult.dataValues.id,
+        imageId: createImageResult !== undefined ? createImageResult.dataValues.id : null,
         comment: req.body.comment,
         rating: Number(req.body.rating),
       });

@@ -84,7 +84,6 @@ module.exports = {
    *     location1-5, category.tag, Image.fileName&Path, title, review, adminDistrict(null)
    */
   post: (req, res) => {
-
     const token = req.cookies.user;
     // verify token -> 없으면 401
     jwt.verify(token, secretObj.secret, async (err, decoded) => {
