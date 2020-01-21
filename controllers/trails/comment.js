@@ -14,7 +14,6 @@ module.exports = (req, res) => {
           filePath: req.file.path,
         });
       }
-      console.log(Number(req.params.trailId));
       const createCommentResult = await comments.create({
         userId: decoded.userId,
         trailId: Number(req.params.trailId),
