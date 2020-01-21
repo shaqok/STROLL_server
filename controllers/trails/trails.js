@@ -84,8 +84,6 @@ module.exports = {
    *     location1-5, category.tag, Image.fileName&Path, title, review, adminDistrict(null)
    */
   post: (req, res) => {
-    console.log('req.file is ??? ', req.file);
-    console.log('req.body is ??? ', req.body);
 
     const token = req.cookies.user;
     // verify token -> 없으면 401
@@ -95,9 +93,7 @@ module.exports = {
         const {
           tag, title, review, adminDistrict, newLocations,
         } = req.body;
-        console.log('newlocations 1111 ', newLocations);
-        console.log('newlocations 2222 ', JSON.parse(newLocations));
-        console.log('newlocations 3333 ', JSON.parse(newLocations)[0]);
+        const convertedLocations = JSON.parse(newLocations);
         // 이미지 파일을 추가했는지 확인
         let createImageResult;
         if (req.file !== undefined) {
@@ -109,11 +105,11 @@ module.exports = {
         // locations 테이블에 좌표들 추가.
         const createLocation = await locations
           .create({
-            location1: JSON.stringify(JSON.parse(newLocations)[0]),
-            location2: JSON.stringify(JSON.parse(newLocations)[1]),
-            location3: JSON.stringify(JSON.parse(newLocations)[2]),
-            location4: JSON.stringify(JSON.parse(newLocations)[3]),
-            location5: JSON.stringify(JSON.parse(newLocations)[4]),
+            location1: JSON.stringify(convertedLocations[0]),
+            location2: JSON.stringify(convertedLocations[1]),
+            location3: JSON.stringify(convertedLocations[2]),
+            location4: JSON.stringify(convertedLocations[3]),
+            location5: JSON.stringify(convertedLocations[4]),
           })
           .catch((error) => {
             console.log(error);
