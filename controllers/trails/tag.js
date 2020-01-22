@@ -10,12 +10,6 @@ const {
   categories,
 } = require('../../models');
 
-/**
- * ex) http://localhost:3000/trails/:tag
- * myPage 접속 후 태그를 클릭할 때마다 보내는 요청.
- * 필요한 데이터: token(decoded -> userId, email 포함)으로 인증, req.params.tag
- * -주의: trail에 있는 userId는 작성자의 정보, token 과 같이 들어오는 id는 현재 접속한 유저!
- */
 module.exports = (req, res) => {
   // 선택한 tag
   const { tag } = req.params;

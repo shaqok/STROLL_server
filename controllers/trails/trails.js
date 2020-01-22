@@ -54,7 +54,7 @@ module.exports = {
             nest: true, // 객체 형태로 구성
           })
           .catch((error) => {
-            console.log(error);
+            console.error(error);
             res.sendStatus(500);
           });
         // 각 가져온 값들에서 location들을 병합.

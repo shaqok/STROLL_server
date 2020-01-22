@@ -78,6 +78,7 @@ module.exports = (req, res) => {
           joinResult[i].location.location5,
         ];
       }
+      // eslint-disable-next-line prefer-destructuring
       resData.trail = combineTrailsLocation[0];
       // ! comments는 관계에 의해 별도로 실행 => 하나의 triail에 여러 comment가 각기 다른 key/value를 가지기 때문
       // * comments 모델에서 req.params.trailid를 이용하여 trailId가 같은 데이터 전부 가져오기

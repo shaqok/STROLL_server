@@ -1,4 +1,4 @@
 const jwtObj = {};
-jwtObj.secret = 'projectStroll';
+jwtObj.secret = process.env.JWT_SECRET;
 
 module.exports = jwtObj;
