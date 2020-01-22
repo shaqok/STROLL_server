@@ -14,7 +14,7 @@ module.exports = async (req, res) => {
       },
     })
     .catch((error) => {
-      console.log(error);
+      console.error(error);
       res.sendStatus(500);
     });
   // 이미 존재한다면 409
@@ -34,13 +34,13 @@ module.exports = async (req, res) => {
       })
       .spread((data, created) => {
         if (created) {
-          res.status(201).json(data);
+          res.sendStatus(201);
         } else {
           res.sendStatus(409);
         }
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
         res.sendStatus(500);
       });
   }
