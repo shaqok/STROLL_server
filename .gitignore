@@ -1,5 +1,5 @@
-.env
 node_modules/
 .eslintignore
 .prettierrc
 .DS_Store
+.env
