@@ -11,6 +11,8 @@ To run this project, install it locally using npm:
 ```
 $ npm install
 $ npm start
+
+create .env file and environment variables inside according to .env.example
 ```
 ## Directory structure
 
