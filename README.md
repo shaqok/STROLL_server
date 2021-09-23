@@ -5,6 +5,10 @@
 ###
 ###
 
+Stroll: Share your favorite places to walk or ride, and find new places to stroll!
+
+[** Stroll-client  **](https://github.com/shaqok/STROLL_client)
+  
 ## Setup
 To run this project, install it locally using npm:
 
