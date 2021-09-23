@@ -5,9 +5,9 @@
 ###
 ###
 
-Stroll: Share your favorite places to walk or ride, and find new places to stroll!
+## Stroll: Share your favorite places to walk or ride, and find new places to stroll!
 
-[** Stroll-client  **](https://github.com/shaqok/STROLL_client)
+[- Stroll-client](https://github.com/shaqok/STROLL_client)
   
 ## Setup
 To run this project, install it locally using npm:
@@ -99,3 +99,8 @@ create .env file and environment variables inside according to .env.example
   That's it! now you can find the walking trails you added.
   
 ![Screen-Recording-2020-01-24-at-7 37 12-PM](https://user-images.githubusercontent.com/54762756/73063112-5e5df100-3ee1-11ea-9db2-f72ed7abc901.gif)
+  
+#
+  
+[**enjoy your stroll with STROLL !**](http://stroll1.s3-website.ap-northeast-2.amazonaws.com/)
+
