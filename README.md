@@ -64,11 +64,11 @@ create .env file and environment variables inside according to .env.example
 ## Contents
 
 - **Find Walking trails**  
-  Based on the current location, you can find a Walking trails.  
-  You can also choose a  Walking trails depending on the working trail theme (e.g. Lake View).
+  Based on the current location, you can find walking trails.  
+  You can also choose a theme (e.g. Lake View) that you prefer and filter the trails.
 
 - **Add Walking trails**  
-  If you don't have a Walking trails you want or if you want to add one, you can add one using the Add Trail button.
+  If you can't find one around your current location or if you want to share your favorite places, you can add a new trail using the Add Trail button.
   
 
 ## Usage
@@ -84,7 +84,7 @@ create .env file and environment variables inside according to .env.example
   
 - STROLL Main  
   You can Find all the walking trails around you in main page.  
-  and you can choose walking trails theme  
+  Or you can also find walking trails based on the themes below.
   We basically support four themes.
   - With pet
   - Lake view
@@ -93,10 +93,10 @@ create .env file and environment variables inside according to .env.example
 
 ![Screen-Recording-2020-01-24-at-7 27 08-PM](https://user-images.githubusercontent.com/54762756/73062594-23a78900-3ee0-11ea-85f5-2e1c3ba526e5.gif)
 
-- Add walking trails  
-  You can add a walking trails.  
-  Take five dots, enter the walking trails information, and press the button.  
-  That's it! now you can find the walking trails you added.
+- Add a walking trail  
+  You can add a walking trail:  
+  Take five dots, fill in the information for this trail, and press the button.  
+  That's it! now you can find the walking trail you just added.
   
 ![Screen-Recording-2020-01-24-at-7 37 12-PM](https://user-images.githubusercontent.com/54762756/73063112-5e5df100-3ee1-11ea-9db2-f72ed7abc901.gif)
   
