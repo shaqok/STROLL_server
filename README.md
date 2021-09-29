@@ -21,43 +21,41 @@ create .env file and environment variables inside according to .env.example
 ## Directory structure
 
 ```
-├── App.js
-├── Root.js
-├── component
-│   ├── AddTrail
-│   │   ├── AddTrail.css
-│   │   ├── Info_Map.js
-│   │   └── Info_Trail_Input.js
-│   ├── Login
-│   │   ├── LoginInfo.css
-│   │   └── LoginInfo.js
-│   ├── Main
-│   │   ├── Map.js
-│   │   ├── ThemeList.js
-│   │   ├── ThemeListElement.js
-│   │   ├── TrailList.js
-│   │   ├── TrailListElement.js
-│   │   └── mypage.css
-│   ├── Signup
-│   │   ├── SignUpInfo.css
-│   │   └── SignUpInfo.js
-│   └── TrailInfo
-│       ├── CommentList.js
-│       ├── CommentListElement.js
-│       ├── Info_Map.js
-│       ├── Info_Trail.js
-│       ├── Photozone.js
-│       ├── RecentReview.js
-│       ├── navermap.png
-│       └── style.css
-├── index.css
+.
+├── README.md
+├── config
+│   ├── config.js
+│   └── jwt.js
+├── controllers
+│   ├── signin.js
+│   ├── signup.js
+│   └── trails
+│       ├── comment.js
+│       ├── tag.js
+│       ├── trailId.js
+│       └── trails.js
 ├── index.js
-└── pages
-    ├── addTrail.js
-    ├── login.js
-    ├── mypage.js
+├── migrations
+│   ├── 20200114050301-create-users.js
+│   ├── 20200115075622-create-categories.js
+│   ├── 20200115075901-create-images.js
+│   ├── 20200115080332-create-locations.js
+│   ├── 20200118051951-create-trails.js
+│   └── 20200118053842-create-comments.js
+├── models
+│   ├── categories.js
+│   ├── comments.js
+│   ├── images.js
+│   ├── index.js
+│   ├── locations.js
+│   ├── trails.js
+│   └── users.js
+├── package-lock.json
+├── package.json
+└── routes
+    ├── signin.js
     ├── signup.js
-    └── trailinfo.js
+    └── trails.js
 
 ```
   
